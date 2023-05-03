@@ -4,6 +4,8 @@ import threading
 
 HOST, PORT = "0.0.0.0", 5005
 
+acceptable_keybindings = ['f3'] # add your keybinding, for instance: `alt+f4`
+
 def press_key(keybinding):
     keys = keybinding.split('+')
     pyautogui.hotkey(*keys)
@@ -15,8 +17,9 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
             data = self.request.recv(1024)
             if data:
                 key = data.decode('utf-8')
-                print("Received key press: {}".format(key))
-                press_key(key)
+                if key in acceptable_keybindings:
+                    print("Received key press: {}".format(key))
+                    press_key(key)
             else:
                 break
 
